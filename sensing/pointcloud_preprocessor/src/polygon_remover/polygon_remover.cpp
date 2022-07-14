@@ -34,17 +34,17 @@ PolygonRemoverComponent::PolygonRemoverComponent(const rclcpp::NodeOptions & opt
   polygon_vertices_ = param.as_double_array();
   if (polygon_vertices_.size() % 2 != 0) {
     throw std::length_error(
-      "polygon_vertices has odd number of elements. "
-      "It must have a list of x,y double pairs.");
+            "polygon_vertices has odd number of elements. "
+            "It must have a list of x,y double pairs.");
   }
 
   auto make_point = [](float x, float y, float z) {
-    geometry_msgs::msg::Point32 point_32;
-    point_32.set__x(x);
-    point_32.set__y(y);
-    point_32.set__z(z);
-    return point_32;
-  };
+      geometry_msgs::msg::Point32 point_32;
+      point_32.set__x(x);
+      point_32.set__y(y);
+      point_32.set__z(z);
+      return point_32;
+    };
   polygon_ = std::make_shared<geometry_msgs::msg::Polygon>();
   for (size_t i = 0UL; i < polygon_vertices_.size(); i += 2) {
     auto p_x = static_cast<float>(polygon_vertices_.at(i));
@@ -87,12 +87,12 @@ void PolygonRemoverComponent::update_polygon(
     marker_.color.b = 0.0;
 
     auto make_point = [](float x, float y, float z) {
-      geometry_msgs::msg::Point point;
-      point.x = static_cast<double>(x);
-      point.y = static_cast<double>(y);
-      point.z = static_cast<double>(z);
-      return point;
-    };
+        geometry_msgs::msg::Point point;
+        point.x = static_cast<double>(x);
+        point.y = static_cast<double>(y);
+        point.z = static_cast<double>(z);
+        return point;
+      };
     for (size_t index_cur = 0; index_cur < polygon_cgal_.size(); ++index_cur) {
       const auto & vertex = polygon_cgal_.at(index_cur);
 
@@ -152,7 +152,8 @@ sensor_msgs::msg::PointCloud2 PolygonRemoverComponent::remove_polygon_cgal_from_
     if (
       CGAL::bounded_side_2(
         polyline_polygon.begin(), polyline_polygon.end(), PointCgal(point.x, point.y), K()) ==
-      CGAL::ON_UNBOUNDED_SIDE) {
+      CGAL::ON_UNBOUNDED_SIDE)
+    {
       pcl::PointXYZ p;
       p.x = point.x;
       p.y = point.y;
@@ -175,7 +176,7 @@ std::vector<PointCgal> PolygonRemoverComponent::polygon_geometry_to_cgal(
   polyline_polygon.resize(vertices_in.size());
   std::transform(
     polygon_in->points.begin(), polygon_in->points.end(), polyline_polygon.begin(),
-    [](const geometry_msgs::msg::Point32 & p_in) { return PointCgal(p_in.x, p_in.y); });
+    [](const geometry_msgs::msg::Point32 & p_in) {return PointCgal(p_in.x, p_in.y);});
   return polyline_polygon;
 }
 }  // namespace pointcloud_preprocessor
